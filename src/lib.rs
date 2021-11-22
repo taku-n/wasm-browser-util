@@ -29,8 +29,9 @@ pub async fn spawn() -> i32 {
 
 pub async fn test_spawn() {
     console::log_1(&"test_spawn() begins.".into());
-    let output = spawn().await;
-    console::log_1(&output.into());
+    let output = spawn();
+    // Some other tasks.
+    console::log_1(&output.await.into());
     console::log_1(&"test_spawn() ends.".into());
 }
 
