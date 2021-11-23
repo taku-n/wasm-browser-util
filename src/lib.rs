@@ -72,11 +72,12 @@ pub async fn js_panic() -> Promise {
     Promise::resolve(&JsValue::NULL)
 }
 
-// FYI: If your program uses the name "test_main()",
-// linking with `rust-lld` fails with note: rust-lld: error: duplicate symbol: test_main.
+// FYI: If your program uses the name "wasm_browser_util_main()",
+// linking with `rust-lld` fails with
+// note: rust-lld: error: duplicate symbol: wasm_browser_util_main.
 #[wasm_bindgen(start)]
-pub async fn test_main() {
-    console::log_1(&"main() begins.".into());
+pub async fn wasm_browser_util_main() {
+    console::log_1(&"wasm_browser_util_main() begins.".into());
     test_run_local().await;
-    console::log_1(&"main() ends.".into());
+    console::log_1(&"wasm_browser_util_main() ends.".into());
 }
