@@ -49,7 +49,23 @@ async fn test_run_local() {
     console::log_1(&"test_run_local() ends.".into());
 }
 
+pub async fn sleep(s: i32) {
+    // It panics when the i32 value is outside of the range of u64.
+    let s_u64 = u64::try_from(s).unwrap();
+
+    let d = Duration::from_secs(s_u64);
+    Delay::new(d).await.unwrap();
+}
+
 #[wasm_bindgen]
+pub async fn js_sleep(s: i32) -> Promise {
+    sleep(s).await;
+
+    Promise::resolve(&JsValue::NULL)
+}
+
+#[wasm_bindgen]
+#[allow(unreachable_code)]
 pub async fn js_panic() -> Promise {
     panic!();
 
