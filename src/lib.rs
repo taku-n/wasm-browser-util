@@ -40,13 +40,13 @@ pub fn run_local<T, Fut>(future: Fut) -> impl Future<Output = Result<T, oneshot:
 }
 
 async fn test_run_local() {
-    console::log_1(&"test_run_local() begins.".into());
+    console::log_1(&"test run_local ...".into());
     let future = run_local::<i32, _>(async {
         2
     });
     let two = future.await.unwrap();
-    console::log_1(&two.into());  //=> 2
-    console::log_1(&"test_run_local() ends.".into());
+    assert_eq!(two, 2);
+    console::log_1(&"ok".into());
 }
 
 pub async fn sleep(s: i32) {
@@ -72,12 +72,14 @@ pub async fn js_panic() -> Promise {
     Promise::resolve(&JsValue::NULL)
 }
 
-// FYI: If your program uses the name "wasm_browser_util_main()",
+// FYI: If your program uses the name "js_test_wasm_browser_util()",
 // linking with `rust-lld` fails with
-// note: rust-lld: error: duplicate symbol: wasm_browser_util_main.
-#[wasm_bindgen(start)]
-pub async fn wasm_browser_util_main() {
-    console::log_1(&"wasm_browser_util_main() begins.".into());
+// note: rust-lld: error: duplicate symbol: js_test_wasm_browser_util.
+#[wasm_bindgen]
+pub async fn js_test_wasm_browser_util() -> Promise {
+    console::log_1(&"js_test_wasm_browser_util() begins.".into());
     test_run_local().await;
-    console::log_1(&"wasm_browser_util_main() ends.".into());
+    console::log_1(&"js_test_wasm_browser_util() ends.".into());
+
+    Promise::resolve(&JsValue::NULL)
 }

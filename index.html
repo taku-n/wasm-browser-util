@@ -8,10 +8,16 @@
 
 <body>
 <script type="module">
-import init, {js_sleep as sleep, js_panic as panic} from './pkg/wasm_browser_util.js';
+import init, {
+  js_test_wasm_browser_util as test_wasm_browser_util,
+  js_sleep as sleep,
+  js_panic as panic,
+} from './pkg/wasm_browser_util.js';
 
 async function main() {
   await init();
+
+  await test_wasm_browser_util();
 
   console.log('Sleep.');
   await sleep(3);
