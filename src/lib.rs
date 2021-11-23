@@ -72,8 +72,10 @@ pub async fn js_panic() -> Promise {
     Promise::resolve(&JsValue::NULL)
 }
 
+// FYI: If your program uses the name "test_main()",
+// linking with `rust-lld` fails with note: rust-lld: error: duplicate symbol: test_main.
 #[wasm_bindgen(start)]
-pub async fn main() {
+pub async fn test_main() {
     console::log_1(&"main() begins.".into());
     test_run_local().await;
     console::log_1(&"main() ends.".into());
