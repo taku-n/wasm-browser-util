@@ -8,13 +8,20 @@
 
 <body>
 <script type="module">
-import init from './pkg/wasm_browser_util.js';
+import init, {js_panic as panic} from './pkg/wasm_browser_util.js';
 
 async function main() {
   await init();
+
+  // Uncaught (in promise) RuntimeError: unreachable executed, js_panic, main
+  // No message appears...
+  //await panic('I panic.');  // Obsolete.
+  //
+  // Now I removed the argument.
+  //await panic();
 }
 
-main();
+await main();
 </script>
 </body>
 

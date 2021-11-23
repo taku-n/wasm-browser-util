@@ -1,13 +1,23 @@
 use wasm_bindgen::prelude::*;
+use js_sys::Promise;
 use web_sys::console;
 use futures::channel::oneshot;
 use futures::prelude::*;
 
+use std::time::Duration;
+
+use fluvio_wasm_timer::Delay;
+
+// run_local():
+//  Runs an async block concurrently and immediately without await.
+//
 // Usage:
 //  let future = run_local::<return-type-of-async-block, _>(async [move] {});
+//
 // Example:
 //  let future = run_local::<i32, _>(async {2});
 //  future.await.unwrap();  // 2 of i32
+//
 // I'm not sure but I guess the static lifetime is needed
 // for the time the spawned thread remains longer than the caller.
 pub fn run_local<T, Fut>(future: Fut) -> impl Future<Output = Result<T, oneshot::Canceled>>
@@ -29,14 +39,21 @@ pub fn run_local<T, Fut>(future: Fut) -> impl Future<Output = Result<T, oneshot:
     rx
 }
 
-pub async fn test_run_local() {
-    console::log_1(&"test_spawn() begins.".into());
+async fn test_run_local() {
+    console::log_1(&"test_run_local() begins.".into());
     let future = run_local::<i32, _>(async {
         2
     });
     let two = future.await.unwrap();
     console::log_1(&two.into());  //=> 2
-    console::log_1(&"test_spawn() ends.".into());
+    console::log_1(&"test_run_local() ends.".into());
+}
+
+#[wasm_bindgen]
+pub async fn js_panic() -> Promise {
+    panic!();
+
+    Promise::resolve(&JsValue::NULL)
 }
 
 #[wasm_bindgen(start)]
